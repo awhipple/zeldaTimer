@@ -5,9 +5,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let countdownDate = new Date("2023-05-11T21:00:00").getTime();
 
-    let circleRadius = 350;
-    let arcDegrees = 300;
-    let fontSize = 100;
+    let circleRadius, arcDegrees, fontSize;
+
+
+    const setResponsiveValues = () => {
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+      
+        if (screenWidth <= 767) { // Mobile screen size
+          circleRadius = 150;
+          arcDegrees = 300;
+          fontSize = 50;
+      
+          const aspectRatio = 0.6;
+          const newWidth = screenWidth + 300;
+          canvas.style.backgroundSize = `${newWidth}px ${newWidth*aspectRatio}px`;
+        } else { // Laptop/desktop screen size
+          circleRadius = 350;
+          arcDegrees = 300;
+          fontSize = 100;
+          canvas.style.backgroundSize = "cover";
+        }
+      };
+
     let circleX = canvas.width / 2;
     let circleY = canvas.height / 2;
 
@@ -33,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const showVideo = () => {
+        videoShown = true;
+
         const videoContainer = document.getElementById("video-container");
         const youtubeVideo = document.getElementById("youtube-video");
         const videoId = "A0Jeez1gdZI";
@@ -60,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (minutes === 0 && seconds === 0 && !videoShown) {
             showVideo();
-            videoShown = true;
         }
 
         let timerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
@@ -97,10 +118,22 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     const initialize = () => {
+        setResponsiveValues();
         resizeCanvas();
         setInterval(updateTimer, 1000);
     };
     
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', () => {
+        setResponsiveValues();
+        resizeCanvas();
+    });
+
+    // Show video when the spacebar is pressed
+    document.addEventListener('keydown', (event) => {
+        if (event.code === 'Space' && !videoShown) {
+            showVideo();
+        }
+    });  
+
     initialize();
 });
