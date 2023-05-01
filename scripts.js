@@ -5,8 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let countdownDate = new Date("2023-05-11T21:00:00").getTime();
 
-    let circleRadius, arcDegrees, fontSize;
+    let circleRadius, arcDegrees, fontSize, progressRingWidth, progressBarRadius;
 
+    // Progress ring customization
+    const progressRingColor = 'rgba(133, 251, 175, 0.7)'; // Customize the color
 
     const setResponsiveValues = () => {
         const screenWidth = window.innerWidth;
@@ -16,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
           circleRadius = 150;
           arcDegrees = 300;
           fontSize = 50;
+          progressRingWidth = 6;
+          progressBarRadius = 80;
       
           const aspectRatio = 0.6;
           const newWidth = screenWidth + 300;
@@ -24,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
           circleRadius = 350;
           arcDegrees = 300;
           fontSize = 100;
+          progressRingWidth = 10;
+          progressBarRadius = 200;
           canvas.style.backgroundSize = "cover";
         }
       };
@@ -87,6 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
         let timerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw the progress ring
+        const progress = timeLeft / (10 * 24 * 60 * 60 * 1000);
+        const startAngle = -Math.PI / 2;
+        const endAngle = (Math.PI * 2) * progress + startAngle;
+
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 2, progressBarRadius - progressRingWidth / 2, startAngle, endAngle);
+        ctx.lineWidth = progressRingWidth;
+        ctx.strokeStyle = progressRingColor;
+        ctx.stroke();
 
         ctx.font = `${fontSize}px 'ZFont'`;
         ctx.fillStyle = 'rgb(221,164,23)';
