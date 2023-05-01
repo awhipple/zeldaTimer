@@ -17,6 +17,33 @@ document.addEventListener('DOMContentLoaded', () => {
         document.fonts.add(font);
     });
 
+    const playAudio = () => {
+        const customAudio = document.getElementById("custom-audio");
+        customAudio.play();
+    };
+
+    const hideVideo = () => {
+        const videoContainer = document.getElementById("video-container");
+        const youtubeVideo = document.getElementById("youtube-video");
+        
+        videoContainer.style.display = "none";
+        youtubeVideo.src = ""; // Stop the video and remove the source
+
+        videoShown = false;
+    };
+
+    const showVideo = () => {
+        const videoContainer = document.getElementById("video-container");
+        const youtubeVideo = document.getElementById("youtube-video");
+        const videoId = "A0Jeez1gdZI";
+
+        videoContainer.style.display = "block";
+        youtubeVideo.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&mute=1`;
+        
+        setTimeout(playAudio, 1000);
+        setTimeout(hideVideo, 20000);
+    };
+
     const updateTimer = () => {
         let now = new Date().getTime();
         let timeLeft = countdownDate - now;
@@ -30,6 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
         let hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
         let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+
+        if (minutes === 0 && seconds === 0 && !videoShown) {
+            showVideo();
+            videoShown = true;
+        }
 
         let timerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
@@ -54,6 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ctx.restore();
     };
+
+    let videoShown = false;
 
     const resizeCanvas = () => {
         canvas.width = window.innerWidth;
