@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const backgroundImage = document.getElementById('background-image');
+    const backgroundImage = document.querySelector('canvas');
     const canvas = document.getElementById('timer-canvas');
     const ctx = canvas.getContext('2d');
 
@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let timeLeft = countdownDate - now;
 
         if (timeLeft <= 0) {
+            console.log("Time's up!")
             timeLeft = 0;
             backgroundImage.style.backgroundImage = "url('bg2.png')";
         }
